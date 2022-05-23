@@ -1,0 +1,22 @@
+class Solution {
+public:
+    vector<vector<vector<int>>>dp;
+    //int dp[601][101][101];
+    int solve(int pos, int m, int n, int size, vector<string>&str)
+    {
+        if(pos>=size) return 0;
+        if(m==0 && n==0) return 0;
+        if(dp[pos][m][n]!=-1) return dp[pos][m][n];
+        int ones=count(str[pos].begin(),str[pos].end(),'1');
+        int zeros=str[pos].size()-ones;
+        if(m>=zeros && n>=ones){
+        return dp[pos][m][n]=max(1+solve(pos+1,m-zeros,n-ones,size,str),
+                                 solve(pos+1,m,n,size,str));
+        }
+        else return dp[pos][m][n]=solve(pos+1,m,n,size,str);
+    }
+    int findMaxForm(vector<string>& strs, int m, int n) {
+        dp.resize(strs.size()+1,(vector<vector<int>>(m+1,vector<int>(n+1,-1))));
+        return solve(0,m,n,strs.size(),strs);
+    }
+};
